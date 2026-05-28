@@ -1,11 +1,12 @@
 """
-Main FastAPI application entry point
+Main FastAPI application entry point with authentication routes
 """
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.models import user, product, category, customer, supplier, sale, purchase, expense, invoice
+from app.routes import auth
 
 # Create all database tables
 Base.metadata.create_all(bind=engine)
@@ -26,6 +27,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include authentication routes
+app.include_router(auth.router)
 
 # Health check endpoint
 @app.get("/")
